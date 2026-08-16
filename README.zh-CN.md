@@ -4,7 +4,7 @@
 
 这是一个**通用多 Agent 兼容**的 skill，允许 Hermes、Claude Code、OpenAI Codex、OpenClaw 以及其他兼容 Agent 调用和编排 xAI 官方的 **Grok Build CLI**。
 
-**适配的 Grok Build CLI 版本**：`v0.2.92`（2026-07-08 观测，**Grok 4.5** 驱动） / API 编码模型 `grok-build-0.1`。
+**适配的 Grok Build CLI 版本**：`~v1.0.4`（截至 2026-08-15，**Grok 4.6** / `grok-4.6` 驱动）。
 
 ## 跨 Agent 兼容结构与安装
 
@@ -12,7 +12,7 @@
 
 ```text
 repo/
-├── SKILL.md                                      # 跨 Agent 通用的权威说明 (v1.3.0)
+├── SKILL.md                                      # 跨 Agent 通用的权威说明 (v1.4.0)
 ├── AGENTS.md                                    # Codex / OpenAI 项目指令
 ├── CLAUDE.md                                    # Claude Code 项目指令
 ├── agents/openai.yaml                           # 可选 OpenAI agent 元数据
@@ -29,30 +29,32 @@ repo/
 - **Hermes Agent**：复制 `skills/autonomous-ai-agents/grok-build-for-agent/` 到 `~/.hermes/skills/autonomous-ai-agents/grok-build-for-agent/`，然后开启新会话。
 - **通用 AgentSkills 加载器**：使用包含 `SKILL.md` 的目录；skill 名称为 `grok-build-for-agent`。
 
-本 skill 基于 xAI Grok Build 最新官方文档（docs.x.ai/build/*）及 v0.2.92 CLI help 全面更新。Grok Build 仍在快速迭代，升级后请重新运行 `grok --help` 核对参数。
+本 skill 基于 xAI Grok Build 最新官方文档（docs.x.ai/build/*）及 ~v1.0.4 CLI 全面更新。Grok Build 仍在快速迭代，升级后请重新运行 `grok --help` 核对参数。
 
 ## 动因
 
-虽然 Agent 可以通过 `xai-oauth` 或 xAI API 直接使用 Grok 模型，但很多用户希望利用 **Grok Build** 完整的 coding agent 能力（headless 执行、Plan Mode、丰富 tooling、MCP/plugin 支持、ACP、会话/worktree 管理、Grok 4.5 能力等）。
+虽然 Agent 可以通过 `xai-oauth` 或 xAI API 直接使用 Grok 模型，但很多用户希望利用 **Grok Build** 完整的 coding agent 能力（headless 执行、Plan Mode、丰富 tooling、MCP/plugin 支持、ACP、会话/worktree 管理、Grok 4.6 能力等）。
 
 本 skill 为任何兼容 Agent 提供了一种干净、标准化的方式来调用 `grok` 二进制，支持 headless 模式或 ACP 模式，类似于 `codex` skill 调用 OpenAI Codex CLI 的方式，但现在具有更广泛的跨 Agent 生态兼容性。
 
 ## 官方文档支持的关键能力
 
-- Headless 执行：`grok -p "prompt"` / `--prompt-file` / `--prompt-json`
-- 输出格式：`plain`、`json`、`streaming-json`；新增 `--json-schema` 用于结构化验证
-- 丰富 flag：`--always-approve`/`--yolo`、`--permission-mode`、`--effort`/`--reasoning-effort`、`--tools`/`--disallowed-tools`、`--max-turns`、`--no-plan`、`--no-subagents`、worktree、会话管理、`grok inspect`、MCP/plugin 命令等
+- Headless 执行：`grok -p "prompt"` / `--single` / `--prompt-file` / `--prompt-json`
+- 输出格式：`plain`、`json`、`streaming-json`（现已包含 tool/usage 等更丰富数据）；`--json-schema` 用于结构化验证
+- 丰富 flag：`--always-approve`/`--yolo`、`--effort`、`--allow`/`--deny`、`--tools`/`--disallowed-tools`、`--max-turns`、`--no-plan`、`--no-subagents`、worktree、会话管理、`grok inspect`、MCP/plugin 命令等
 - ACP 支持：`grok agent stdio`
-- 模型：Grok 4.5（主要）+ grok-build-0.1 编码模型
+- 模型：**Grok 4.6**（主要）
 - 会话/worktree/export/import（支持从 Claude Code 导入）
+- Headless 可靠性提升（等待 MCP、ask/plan 不再硬失败）
 
 ## 安装
 
-添加本仓库为 skill tap 后：
+添加本仓库为 skill tap 后（或手动复制 skill 目录）：
 
 ```bash
-hermes skills tap add yanyintingyou/grok-build-for-hermes
-grok-build-for-agent skill install（或对应 Agent 的安装命令）
+# Hermes 风格示例
+hermes skills tap add yanyintingyou/grok-build-for-agent
+# 然后按你的 Agent 方式安装 / 启用 skill
 ```
 
 ## 使用示例
@@ -66,11 +68,11 @@ grok-build-for-agent skill install（或对应 Agent 的安装命令）
 使用 --always-approve --output-format streaming-json --max-turns 20
 ```
 
-Agent 会生成符合 v0.2.92 官方文档参数的 `terminal`（或等效）调用。
+Agent 会生成符合当前 Grok Build 官方文档参数的 `terminal`（或等效）调用。
 
 ## 版本说明
 
-本 skill 适配 **Grok Build v0.2.92**（2026-07-08 观测，Grok 4.5 驱动）。未来版本可能有破坏性变更；自动化前请先运行 `grok version` 和 `grok --help`。双布局与多 Agent metadata 确保广泛兼容性。
+本 skill 适配 **Grok Build ~v1.0.4**（2026-08-15 观测，Grok 4.6 驱动）。未来版本可能有破坏性变更；自动化前请先运行 `grok version` 和 `grok --help`。双布局与多 Agent metadata 确保广泛兼容性。
 
 ## License
 
