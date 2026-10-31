@@ -1,4 +1,4 @@
 interface:
   display_name: "Grok Build for Agent"
-  short_description: "AgentSkills-compatible skill: grok-build-for-agent (multi-agent, Grok Build ~v1.0.4 + Grok 4.6)"
+  short_description: "AgentSkills-compatible skill: grok-build-for-agent (multi-agent, Grok Build ~v1.0.70 + Grok 4.7, frozen 2026-10-31)"
   default_prompt: "Use $grok-build-for-agent and follow SKILL.md."

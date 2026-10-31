@@ -1,1 +1,3 @@
 Use SKILL.md as the authoritative instructions for the `grok-build-for-agent` skill.
+
+Snapshot: Grok Build CLI ~v1.0.70 + Grok 4.7 (2026-10-31). This repository is frozen and no longer updated; verify flags with `grok --help`.

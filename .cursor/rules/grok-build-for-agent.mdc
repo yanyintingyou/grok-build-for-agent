@@ -5,3 +5,5 @@ alwaysApply: false
 ---
 
 Use the repository root `SKILL.md` as the authoritative instruction file. The packaged skill copy is `skills/autonomous-ai-agents/grok-build-for-agent/SKILL.md`.
+
+Snapshot: Grok Build CLI ~v1.0.70 + Grok 4.7 (2026-10-31). The repository is frozen and will not receive further updates; confirm flags against `grok --help`.

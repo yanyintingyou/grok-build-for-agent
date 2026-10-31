@@ -2,9 +2,13 @@
 
 [简体中文](README.zh-CN.md) | English
 
+> **Project status: frozen — no further updates.**
+> Final refresh: **2026-10-31**, targeting **Grok Build CLI v1.0.70** (2026-10-23) powered by **Grok 4.7** / `grok-4.7`.
+> Grok Build ships roughly every day; this snapshot will go stale quickly. For current flags and behavior, use `grok --help` and the official docs at [docs.x.ai/build](https://docs.x.ai/build) instead of this repository.
+
 A universal **multi-agent compatible skill** that allows Hermes, Claude Code, OpenAI Codex, OpenClaw, and other compatible agents to invoke and orchestrate the official **Grok Build CLI** from xAI.
 
-**Target Grok Build CLI version**: `~v1.0.4` (as of 2026-08-15) powered by **Grok 4.6** / model `grok-4.6`.
+**Target Grok Build CLI version**: `~v1.0.70` (as of 2026-10-31) powered by **Grok 4.7** / model `grok-4.7` (plus `grok-4.7-fast`, Grok Build–only).
 
 ## Cross-agent compatibility and installation
 
@@ -12,10 +16,10 @@ This repository uses a dual-layout skill structure for maximum compatibility:
 
 ```text
 repo/
-├── SKILL.md                                      # canonical cross-agent instructions (v1.4.0)
-├── AGENTS.md                                    # Codex/OpenAI project instructions
-├── CLAUDE.md                                    # Claude Code project instructions
-├── agents/openai.yaml                           # optional OpenAI agent metadata
+├── SKILL.md                                      # canonical cross-agent instructions (v1.5.0)
+├── AGENTS.md                                     # Codex/OpenAI project instructions
+├── CLAUDE.md                                     # Claude Code project instructions
+├── agents/openai.yaml                            # optional OpenAI agent metadata
 └── skills/autonomous-ai-agents/grok-build-for-agent/SKILL.md  # packaged skill copy (byte-identical)
 ```
 
@@ -27,25 +31,27 @@ The root `SKILL.md` and the packaged `skills/autonomous-ai-agents/grok-build-for
 - **OpenAI Codex / OpenAI agents**: keep `AGENTS.md` when working in this repository, or copy `skills/autonomous-ai-agents/grok-build-for-agent/` to `~/.agents/skills/autonomous-ai-agents/grok-build-for-agent/`.
 - **OpenClaw**: copy `skills/autonomous-ai-agents/grok-build-for-agent/` to `<workspace>/skills/autonomous-ai-agents/grok-build-for-agent/`, `<workspace>/.agents/skills/...`, or `~/.openclaw/skills/...`.
 - **Hermes Agent**: copy `skills/autonomous-ai-agents/grok-build-for-agent/` to `~/.hermes/skills/autonomous-ai-agents/grok-build-for-agent/`, then start a new Hermes session.
+- **Grok Build itself**: copy to `~/.grok/skills/grok-build-for-agent/` or `<repo>/.grok/skills/grok-build-for-agent/`.
 - **Generic AgentSkills loaders**: use the directory containing `SKILL.md`; skill name is `grok-build-for-agent`.
 
-This skill is based on the latest xAI Grok Build docs (docs.x.ai/build/*) and CLI help from ~v1.0.4. Re-check `grok --help` after upgrades because Grok Build continues to evolve rapidly.
+This skill was based on the xAI Grok Build docs (docs.x.ai/build/*), the CLI reference, and CLI behavior observed at ~v1.0.70. Re-check `grok --help` after upgrades — Grok Build evolves faster than this snapshot.
 
 ## Motivation
 
-While agents can use Grok models directly via `xai-oauth` or the xAI API, many users want the full **Grok Build** coding agent experience (headless execution, Plan Mode, rich tooling, MCP/plugin support, ACP, session/worktree management, Grok 4.6 capabilities, etc.).
+While agents can use Grok models directly via `xai-oauth` or the xAI API, many users want the full **Grok Build** coding agent experience (headless execution, Plan Mode, rich tooling, MCP/plugin support, ACP, session/worktree management, Grok 4.7 capabilities, etc.).
 
 This skill provides a clean, standardized way for any compatible agent to call the `grok` binary in headless mode or ACP mode — similar to how `codex` skills work with OpenAI Codex CLI, but now universally applicable across agent ecosystems.
 
-## Key Capabilities (from Official ~v1.0.4 Docs)
+## Key Capabilities (from Official ~v1.0.70 Docs)
 
 - Headless execution: `grok -p "prompt"` / `--single` / `--prompt-file` / `--prompt-json`
-- Output formats: `plain`, `json`, `streaming-json` (now richer with tool/usage data); plus `--json-schema` for validation
-- Rich flag set: `--always-approve`/`--yolo`, `--effort`, `--allow`/`--deny`, `--tools`/`--disallowed-tools`, `--max-turns`, `--no-plan`, `--no-subagents`, worktree, session management, MCP/plugin commands, `grok inspect`, etc.
-- ACP support: `grok agent stdio`
-- Model: **Grok 4.6** (primary)
-- Session/worktree/export/import (including from Claude Code)
-- Headless reliability improvements (MCP wait, no hard-fail on ask/plan)
+- Output formats: `plain`, `json`, `streaming-json`, `streaming-messages-json` (Anthropic Messages wire format); `--json-schema` for validation
+- Rich flag set: `--always-approve`/`--yolo`, `--effort` (low/medium/high/xhigh), `--allow`/`--deny`, `--tools`/`--disallowed-tools`, `--max-turns`, `--no-plan`, `--no-subagents`, `--background-wait-timeout`, `--plugin-dir`, worktree, session management, MCP/plugin commands, `grok inspect`, etc.
+- Sandbox profiles: `off` / `workspace` / `devbox` / `read-only` / `strict` (network enforcement is Linux-only)
+- ACP support: `grok agent stdio` (text streams via `session/update`, not the `session/prompt` result)
+- Models: **Grok 4.7** (`grok-4.7`, 500k context) and `grok-4.7-fast` (Cursor + Grok Build only)
+- Session/worktree/export/import (including from Claude Code); worktrees inherit saved tool approvals
+- Newer CLI surface: `grok wrap`, `grok completions`, `grok setup`, `grok update --check|--version|--alpha|--stable`
 
 ## Installation
 
@@ -72,7 +78,9 @@ The agent will generate an appropriate `terminal` (or equivalent) call using the
 
 ## Version Notice
 
-This skill targets **Grok Build ~v1.0.4** (observed 2026-08-15, powered by Grok 4.6). Future versions may introduce breaking changes; always run `grok version` and `grok --help` locally before automation. The dual-layout and multi-agent metadata ensure broad compatibility.
+This skill targets **Grok Build ~v1.0.70** (observed 2026-10-31, powered by Grok 4.7). Future versions may introduce breaking changes; always run `grok version` and `grok --help` locally before automation.
+
+This repository is **no longer maintained**. No further commits, version bumps, or compatibility fixes will be made. If you need up-to-date guidance, derive it from `grok --help` and the official docs; the dual-layout structure and multi-agent metadata here remain valid as a packaging example.
 
 ## License
 
